@@ -9,12 +9,19 @@ public class Jugador {
     private int x, y, velocidad = 4;
     private int dx, dy;
     private BufferedImage imagen;
+    private int ancho = 64; // ancho deseado
+    private int alto = 64;  // alto deseado
 
     public Jugador(int x, int y) {
         this.x = x;
         this.y = y;
         try {
-            imagen = ImageIO.read(new File("assets/jugador.png"));
+            BufferedImage original = ImageIO.read(new File("assets/sirena.png"));
+            imagen = new BufferedImage(ancho, alto, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = imagen.createGraphics();
+            g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+            g2d.drawImage(original, 0, 0, ancho, alto, null);
+            g2d.dispose();
         } catch (IOException e) {
             System.out.println("Error cargando jugador.png");
         }
@@ -46,7 +53,7 @@ public class Jugador {
     }
 
     public Rectangle getBounds() {
-        return new Rectangle(x, y, imagen.getWidth(), imagen.getHeight());
+        return new Rectangle(x, y, ancho, alto); // usa las dimensiones escaladas
     }
 
     public void resetearPosicion() {
